@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f0f0f0; }
+        h1 { text-align: center; }
+        .card { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+        .image { max-width: 300px; border: 1px solid #ccc; }
+        .predictions { margin-top: 10px; }
+        .pred { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>BiSindo Prediction Dashboard</h1>
+    {% for req in requests %}
+        <div class="card">
+            <div><strong>Time:</strong> {{ req.timestamp }}</div>
+            {% if req.image_base64 %}
+                <img class="image" src="data:image/png;base64,{{ req.image_base64 }}" />
+            {% else %}
+                <div>No image</div>
+            {% endif %}
+            <div class="predictions">
+                <strong>Predictions:</strong>
+                {% if req.predictions %}
+                    <ul>
+                        {% for pred in req.predictions %}
+                            <li class="pred">{{ pred.label }} - {{ (pred.confidence*100)|round(1) }}%</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    None
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
